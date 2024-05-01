@@ -14,6 +14,7 @@ const eyeglassValidationSchema = z.object({
         brand: z.enum(['lenskart', 'john-jacobs', 'fossil', 'ojos']),
         gender: z.enum(['men', 'women', 'unisex']),
         img: z.string(),
+        addedBy: z.string()
     })
 });
 
@@ -31,7 +32,7 @@ const updateEyeglassValidationSchema = z.object({
         brand: z.enum(['lenskart', 'john-jacobs', 'fossil', 'ojos']).optional(),
         gender: z.enum(['men', 'women', 'unisex']).optional(),
         img: z.string().optional(),
-        addedBy: z.string()
+        addedBy: z.string().optional()
     })
 });
 

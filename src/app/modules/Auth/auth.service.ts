@@ -1,6 +1,6 @@
 import httpStatus from "http-status";
 import AppError from "../../errors/AppError";
-import { User } from "../user/user.model";
+import { User } from "../User/user.model";
 import { TLoginUser } from "./auth.interface";
 import bcrypt from 'bcrypt';
 import { createToken } from "./auth.utils";
