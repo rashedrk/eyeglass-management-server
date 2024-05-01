@@ -1,3 +1,5 @@
+import { Types } from "mongoose"
+
 export type TEyeglass = {
     name: string,
     quantity: number,
@@ -11,4 +13,5 @@ export type TEyeglass = {
     brand: 'lenskart' | 'john-jacobs' | 'fossil' | 'ojos',
     gender: 'men' | 'women' | 'unisex',
     img: string,
+    addedBy: Types.ObjectId
 }

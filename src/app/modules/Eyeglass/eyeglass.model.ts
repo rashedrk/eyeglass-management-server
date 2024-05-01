@@ -60,6 +60,11 @@ const eyeglassSchema = new Schema<TEyeglass>(
             type: String,
             required: true,
         },
+        addedBy: {
+            type: Schema.Types.ObjectId,
+            required: true,
+            ref: "Users"
+        },
     },
     {
         timestamps: true,
