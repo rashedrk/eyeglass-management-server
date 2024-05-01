@@ -10,8 +10,7 @@ const userValidationSchema = z.object({
         name: nameValidationSchema,
         email: z.string().email(),
         password: z.string({ invalid_type_error: 'password must be string' })
-        .max(20, { message: 'Password cannot be bigger than 20 characters' })
-        .optional(),
+        .max(20, { message: 'Password cannot be bigger than 20 characters' }),
     })
 });
 
