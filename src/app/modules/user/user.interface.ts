@@ -4,10 +4,9 @@ export type TName = {
 }
 
 export type TUser = {
-    id: string;
     name: TName;
     email: string;
     password: string;
     role: 'admin' | 'manager' | 'user';
-    isDeleted: boolean;
+    status: 'in-progress' | 'blocked';
 }

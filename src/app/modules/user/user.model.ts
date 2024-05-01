@@ -12,10 +12,9 @@ const nameSchema = new Schema<TName>({
         type: String,
         required: true,
     }
-})
+}, { _id: false })
 
 const userSchema = new Schema<TUser>({
-    id: Schema.Types.ObjectId,
     name: {
         type: nameSchema,
         required: true,
@@ -23,6 +22,7 @@ const userSchema = new Schema<TUser>({
     email: {
         type: String,
         required: true,
+        unique: true
     },
     password: {
         type: String,
@@ -33,12 +33,14 @@ const userSchema = new Schema<TUser>({
         enum: ['admin', 'manager', 'user'],
         required: true,
     },
-    isDeleted: {
-        type: Boolean,
-        default: false
+    status: {
+        type: String,
+        enum: ['in-progress', 'blocked'],
+        default: 'in-progress'
     }
 }, {
     timestamps: true,
+    versionKey: false
 });
 
 
