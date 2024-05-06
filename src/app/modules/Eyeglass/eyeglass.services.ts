@@ -3,19 +3,35 @@ import AppError from "../../errors/AppError";
 import QueryBuilder from "../../utils/QueryBuilder";
 import { TEyeglass } from "./eyeglass.interface";
 import { Eyeglass } from "./eyeglass.model";
+import { TAuthUser } from "../../types/global";
 
 
 const addEyeglassIntoDB = async (payload: TEyeglass) => {
+
     const result = await Eyeglass.create(payload);
     return result;
 };
 
-const updateEyeglassIntoDB = async (id: string, payload: Partial<TEyeglass>) => {
-    const result = await Eyeglass.findByIdAndUpdate(id, payload, {
-        new: true,
-        runValidators: true,
-    });
-    // console.log(result);
+const updateEyeglassIntoDB = async (id: string, payload: Partial<TEyeglass>, user: TAuthUser) => {
+    // console.log(user);
+
+    let result;
+    if (user.role === 'manager') {
+        result = await Eyeglass.findByIdAndUpdate(id, payload, {
+            new: true,
+            runValidators: true,
+        });
+    }
+    else if (user.role === 'user') {
+        result = await Eyeglass.findOneAndUpdate({
+            _id: id,
+            addedBy: user.userId
+        }, payload, {
+            new: true,
+            runValidators: true,
+        });
+    }
+
 
     if (result === null) {
         throw new AppError(httpStatus.NOT_FOUND, 'Product not found!')
@@ -26,8 +42,14 @@ const updateEyeglassIntoDB = async (id: string, payload: Partial<TEyeglass>) => 
     }
 }
 
-const deleteEyeglassIntoDB = async (id: string) => {
-    const result = await Eyeglass.findOneAndDelete({ _id: id });
+const deleteEyeglassIntoDB = async (id: string, user: TAuthUser) => {
+    let result;
+    if (user.role === 'manager') {
+        result = await Eyeglass.findOneAndDelete({ _id: id });
+    } else if (user.role === 'user') {
+        result = await Eyeglass.findOneAndDelete({ _id: id, addedBy: user.userId });
+    }
+
     if (result === null) {
         throw new AppError(httpStatus.NOT_FOUND, 'Product not found!')
     }
@@ -37,14 +59,33 @@ const deleteEyeglassIntoDB = async (id: string) => {
     }
 }
 
-const bulkDeleteEyeglassIntoDB = async (ids: string[]) => {
-    const result = await Eyeglass.deleteMany({ _id: ids });
+const bulkDeleteEyeglassIntoDB = async (ids: string[], user: TAuthUser) => {
+    let result;
+    if (user.role === 'manager') {
+
+        result = await Eyeglass.deleteMany({ _id: ids });
+    }
+    else if (user.role === 'user') {
+        result = await Eyeglass.deleteMany({ _id: ids, addedBy: user.userId });
+    }
     return result;
 }
 
-const getAllEyeglassesFromDB = async (query: Record<string, unknown>) => {
+const getAllEyeglassesFromDB = async (query: Record<string, unknown>, user: TAuthUser) => {
+
+    let addedByQuery;
+
+    if (user.role === 'manager') {
+        addedByQuery = {};
+    }
+    else if (user.role === 'user') {
+        addedByQuery = {
+            addedBy: user.userId
+        }
+    }
+
     const eyeglassQuery = new QueryBuilder(
-        Eyeglass.find({ quantity: { $gt: 0 } }),
+        Eyeglass.find({ quantity: { $gt: 0 }, ...addedByQuery }),
         query
     )
         .search(['name'])

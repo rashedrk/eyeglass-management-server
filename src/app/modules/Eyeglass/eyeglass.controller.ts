@@ -1,4 +1,5 @@
 import catchAsync from "../../utils/catchAsync";
+import getRole from "../../utils/getUser";
 import sendResponse from "../../utils/sendResponse";
 import { EyeglassServices } from "./eyeglass.services";
 
@@ -13,8 +14,10 @@ const addEyeglass = catchAsync(async (req, res) => {
 });
 
 const updateEyeglass = catchAsync(async (req, res) => {
+    const token = req.headers.authorization;
+    const user = getRole(token as string);
     const { id } = req.params;
-    const result = await EyeglassServices.updateEyeglassIntoDB(id, req.body);
+    const result = await EyeglassServices.updateEyeglassIntoDB(id, req.body, user);
 
     sendResponse(res, {
         message: 'Eyeglass updated  successfully',
@@ -22,8 +25,10 @@ const updateEyeglass = catchAsync(async (req, res) => {
     })
 })
 const deleteEyeglass = catchAsync(async (req, res) => {
+    const token = req.headers.authorization;
+    const user = getRole(token as string);
     const { id } = req.params;
-    const result = await EyeglassServices.deleteEyeglassIntoDB(id);
+    const result = await EyeglassServices.deleteEyeglassIntoDB(id, user);
 
     sendResponse(res, {
         message: 'Eyeglass has been deleted  successfully',
@@ -31,8 +36,10 @@ const deleteEyeglass = catchAsync(async (req, res) => {
     })
 })
 const bulkDeleteEyeglass = catchAsync(async (req, res) => {
+    const token = req.headers.authorization;
+    const user = getRole(token as string);
 
-    const result = await EyeglassServices.bulkDeleteEyeglassIntoDB(req.body.ids);
+    const result = await EyeglassServices.bulkDeleteEyeglassIntoDB(req.body.ids, user);
 
     sendResponse(res, {
         message: 'Selected Eyeglasses has been deleted  successfully',
@@ -41,7 +48,9 @@ const bulkDeleteEyeglass = catchAsync(async (req, res) => {
 })
 
 const getAllEyeglasses = catchAsync(async (req, res) => {
-    const result = await EyeglassServices.getAllEyeglassesFromDB(req.query);
+    const token = req.headers.authorization;
+    const user = getRole(token as string);
+    const result = await EyeglassServices.getAllEyeglassesFromDB(req.query, user);
 
     sendResponse(res, {
         message: 'Eyeglass retrieved  successfully',

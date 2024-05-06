@@ -5,6 +5,7 @@ import moment from "moment";
 import { TSales } from "./sales.interface";
 import { Sales } from "./sales.model";
 import { Eyeglass } from "../Eyeglass/eyeglass.model";
+import { TAuthUser } from "../../types/global";
 
 const createSalesIntoDB = async (payload: TSales) => {
 
@@ -41,9 +42,20 @@ const createSalesIntoDB = async (payload: TSales) => {
     }
 };
 
-const getSalesFromDB = async (type: string, date: string) => {
+const getSalesFromDB = async (type: string, date: string, user: TAuthUser) => {
     // console.log(type, date);
+    let addedByQuery;
 
+    if (user.role === 'manager') {
+        addedByQuery = {};
+    }
+    else if (user.role === 'user') {
+        addedByQuery = {
+            soldBy: {
+                $eq: user.userId
+            }
+        }
+    }
     // const allSales = await Sales.find();
     let startDate, endDate;
     let year, weekNumber, monthNumber;
@@ -80,9 +92,14 @@ const getSalesFromDB = async (type: string, date: string) => {
             salesData = await Sales.aggregate([
                 {
                     $match: {
-                        dateOfSale: {
-                            $eq: endDate
-                        }
+                        $and: [
+                            {
+                                dateOfSale: {
+                                    $eq: endDate
+                                },
+                            },
+                            { ...addedByQuery }
+                        ]
                     }
                 },
                 {
@@ -98,10 +115,16 @@ const getSalesFromDB = async (type: string, date: string) => {
             salesData = await Sales.aggregate([
                 {
                     $match: {
-                        dateOfSale: {
-                            $gt: startDate,
-                            $lte: endDate
-                        }
+                        $and: [
+                            {
+                                dateOfSale: {
+                                    $gt: startDate,
+                                    $lte: endDate
+                                }
+
+                            },
+                            { ...addedByQuery }
+                        ]
                     }
                 },
                 {

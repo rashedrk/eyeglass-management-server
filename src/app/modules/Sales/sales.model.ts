@@ -23,6 +23,11 @@ const salesSchema = new Schema<TSales>({
         type: Date,
         required: true,
     },
+    soldBy: {
+        type: String,
+        required: true,
+    },
+
 });
 
 salesSchema.pre('save', async function(next){

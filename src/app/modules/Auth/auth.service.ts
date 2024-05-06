@@ -13,11 +13,6 @@ const loginUser = async (payload: TLoginUser) => {
         throw new AppError(httpStatus.NOT_FOUND, 'This user is not found !');
     }
 
-    // checking if the user is already deleted
-    const isDeleted = user?.isDeleted;
-    if (isDeleted) {
-        throw new AppError(httpStatus.FORBIDDEN, 'This user is deleted !');
-    }
 
     //checking if the password is correct
     if (!(await bcrypt.compare(payload?.password, user?.password))) {
@@ -26,6 +21,7 @@ const loginUser = async (payload: TLoginUser) => {
 
     // creating a jwtpayload with user info to send client 
     const jwtPayload = {
+        userId: user._id,
         email: user.email,
         role: user.role,
     };
