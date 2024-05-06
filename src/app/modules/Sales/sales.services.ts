@@ -65,7 +65,7 @@ const getSalesFromDB = async (type: string, date: string) => {
             startDate = moment().year(Number(date)).startOf('year').toDate();
             endDate = moment().year(Number(date)).endOf('year').toDate();
             // console.log(startDate, endDate);
-            
+
             break;
         default:
             // Handle invalid range
@@ -129,6 +129,10 @@ const getSalesFromDB = async (type: string, date: string) => {
                     img: sale.product[0].img
                 };
             });
+        }
+
+        else {
+            result = null;
         }
 
         return result
