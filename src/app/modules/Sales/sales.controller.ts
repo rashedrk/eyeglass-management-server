@@ -14,10 +14,10 @@ const createSales = catchAsync(async (req, res) => {
 const getSales = catchAsync(async (req, res) => {
     const token = req.headers.authorization;
     const user = getRole(token as string);
-    const type = req.params.type
+    const type = req.query.type
     const date = req.query.date
     
-    const result = await SalesServices.getSalesFromDB(type, date as string, user);
+    const result = await SalesServices.getSalesFromDB(type, date , user);
     sendResponse(res, {
         message: 'Sales retrieved successfully',
         data: result,

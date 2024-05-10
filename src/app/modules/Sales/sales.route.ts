@@ -12,7 +12,7 @@ router.post(
     SalesControllers.createSales
 )
 router.get(
-    '/:type',
+    '/',
     SalesControllers.getSales
 )
 
