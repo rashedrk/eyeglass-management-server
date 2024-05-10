@@ -63,7 +63,9 @@ const getSalesFromDB = async (type: any, date: any, user: TAuthUser) => {
         let year, weekNumber, monthNumber;
         switch (type) {
             case 'daily':
-                endDate = new Date(date);
+                startDate = new Date(date)
+                endDate = new Date(startDate)
+                endDate.setDate(endDate.getDate() + 1)
                 break;
             case 'weekly':
                 [year, weekNumber] = date.split('-').map(Number);
@@ -91,13 +93,15 @@ const getSalesFromDB = async (type: any, date: any, user: TAuthUser) => {
             let salesData = [];
 
             if (type === 'daily') {
+                
                 salesData = await Sales.aggregate([
                     {
                         $match: {
                             $and: [
                                 {
                                     dateOfSale: {
-                                        $eq: endDate
+                                        $gte: startDate,
+                                        $lt: endDate
                                     },
                                 },
                                 { ...addedByQuery }
@@ -111,6 +115,8 @@ const getSalesFromDB = async (type: any, date: any, user: TAuthUser) => {
                         $sort: { 'dateOfSale': -1 }
                     }
                 ]);
+                console.log(startDate, endDate);
+
             }
             else if (type === 'weekly' || type === 'monthly' || type === 'yearly') {
                 // console.log(startDate, endDate);
