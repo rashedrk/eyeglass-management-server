@@ -60,6 +60,10 @@ const eyeglassSchema = new Schema<TEyeglass>(
             type: String,
             required: true,
         },
+        isDeleted: {
+            type: Boolean,
+            default: false
+        },
         addedBy: {
             type: Schema.Types.ObjectId,
             required: true,

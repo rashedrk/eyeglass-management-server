@@ -13,5 +13,6 @@ export type TEyeglass = {
     brand: 'lenskart' | 'john-jacobs' | 'fossil' | 'ojos',
     gender: 'men' | 'women' | 'unisex',
     img: string,
-    addedBy: Types.ObjectId
+    addedBy: Types.ObjectId,
+    isDeleted: boolean,
 }

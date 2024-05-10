@@ -45,9 +45,9 @@ const updateEyeglassIntoDB = async (id: string, payload: Partial<TEyeglass>, use
 const deleteEyeglassIntoDB = async (id: string, user: TAuthUser) => {
     let result;
     if (user.role === 'manager') {
-        result = await Eyeglass.findOneAndDelete({ _id: id });
+        result = await Eyeglass.findOneAndUpdate({ _id: id }, { isDeleted: true });
     } else if (user.role === 'user') {
-        result = await Eyeglass.findOneAndDelete({ _id: id, addedBy: user.userId });
+        result = await Eyeglass.findOneAndUpdate({ _id: id, addedBy: user.userId }, { isDeleted: true });
     }
 
     if (result === null) {
@@ -63,10 +63,10 @@ const bulkDeleteEyeglassIntoDB = async (ids: string[], user: TAuthUser) => {
     let result;
     if (user.role === 'manager') {
 
-        result = await Eyeglass.deleteMany({ _id: ids });
+        result = await Eyeglass.updateMany({ _id: ids }, { isDeleted: true });
     }
     else if (user.role === 'user') {
-        result = await Eyeglass.deleteMany({ _id: ids, addedBy: user.userId });
+        result = await Eyeglass.updateMany({ _id: ids, addedBy: user.userId }, { isDeleted: true });
     }
     return result;
 }
@@ -85,7 +85,7 @@ const getAllEyeglassesFromDB = async (query: Record<string, unknown>, user: TAut
     }
 
     const eyeglassQuery = new QueryBuilder(
-        Eyeglass.find({ quantity: { $gt: 0 }, ...addedByQuery }),
+        Eyeglass.find({ quantity: { $gt: 0 }, isDeleted: false, ...addedByQuery }),
         query
     )
         .search(['name'])
