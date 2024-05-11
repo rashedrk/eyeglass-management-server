@@ -50,6 +50,7 @@ const bulkDeleteEyeglass = catchAsync(async (req, res) => {
 const getAllEyeglasses = catchAsync(async (req, res) => {
     const token = req.headers.authorization;
     const user = getRole(token as string);
+    
     const result = await EyeglassServices.getAllEyeglassesFromDB(req.query, user);
 
     sendResponse(res, {

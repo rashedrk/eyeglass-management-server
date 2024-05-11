@@ -176,7 +176,7 @@ const getSalesFromDB = async (type: any, date: any, user: TAuthUser) => {
     }
     else {
         try {
-            const salesData = await Sales.find({}).sort({ 'dateOfSale': -1 }).populate({
+            const salesData = await Sales.find({...addedByQuery}).sort({ 'dateOfSale': -1 }).populate({
                 path: "productId",
             }) as TSalesHistory[];
 

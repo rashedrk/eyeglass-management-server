@@ -32,6 +32,7 @@ const userSchema = new Schema<TUser, UserModel>({
         type: String,
         enum: ['manager', 'user'],
         required: true,
+        default: 'user',
     },
     status: {
         type: String,
