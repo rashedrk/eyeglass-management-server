@@ -9,6 +9,8 @@ import { Eyeglass } from "../Eyeglass/eyeglass.model";
 import { TAuthUser } from "../../types/global";
 
 const createSalesIntoDB = async (payload: TSales) => {
+    // console.log(payload);
+    
 
     const session = await mongoose.startSession();
 
@@ -93,7 +95,7 @@ const getSalesFromDB = async (type: any, date: any, user: TAuthUser) => {
             let salesData = [];
 
             if (type === 'daily') {
-                
+
                 salesData = await Sales.aggregate([
                     {
                         $match: {
@@ -115,7 +117,7 @@ const getSalesFromDB = async (type: any, date: any, user: TAuthUser) => {
                         $sort: { 'dateOfSale': -1 }
                     }
                 ]);
-                console.log(startDate, endDate);
+                // console.log(startDate, endDate);
 
             }
             else if (type === 'weekly' || type === 'monthly' || type === 'yearly') {
@@ -174,7 +176,7 @@ const getSalesFromDB = async (type: any, date: any, user: TAuthUser) => {
     }
     else {
         try {
-            const salesData = await Sales.find({}).populate({
+            const salesData = await Sales.find({}).sort({ 'dateOfSale': -1 }).populate({
                 path: "productId",
             }) as TSalesHistory[];
 

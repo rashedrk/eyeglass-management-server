@@ -31,6 +31,8 @@ const salesSchema = new Schema<TSales>({
 });
 
 salesSchema.pre('save', async function(next){
+
+    
 const product = await Eyeglass.findById(this.productId);
 const availableQuantity = product?.quantity as number;
 if (this.quantity > availableQuantity) {
