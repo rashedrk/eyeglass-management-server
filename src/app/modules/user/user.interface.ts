@@ -11,7 +11,7 @@ export type TUser = {
     name: TName;
     email: string;
     password: string;
-    role: 'manager' | 'user';
+    role: TUserRole;
     status: 'in-progress' | 'blocked';
 }
 
