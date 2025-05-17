@@ -12,7 +12,7 @@ export type TEyeglass = {
     lensType: 'single-vision' | 'progressive' | 'bifocal',
     brand: 'lenskart' | 'john-jacobs' | 'fossil' | 'ojos',
     gender: 'men' | 'women' | 'unisex',
-    img: string,
+    img: string[],
     addedBy: Types.ObjectId,
     isDeleted: boolean,
 }

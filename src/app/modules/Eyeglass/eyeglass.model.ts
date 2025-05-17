@@ -57,7 +57,7 @@ const eyeglassSchema = new Schema<TEyeglass>(
             required: true
         },
         img: {
-            type: String,
+            type: [String],
             required: true,
         },
         isDeleted: {
