@@ -13,7 +13,7 @@ const eyeglassValidationSchema = z.object({
         lensType: z.enum(['single-vision', 'progressive', 'bifocal']),
         brand: z.enum(['lenskart', 'john-jacobs', 'fossil', 'ojos']),
         gender: z.enum(['men', 'women', 'unisex']),
-        img: z.string(),
+        img: z.array(z.string()),
         addedBy: z.string(),
     })
 });
@@ -31,7 +31,7 @@ const updateEyeglassValidationSchema = z.object({
         lensType: z.enum(['single-vision', 'progressive', 'bifocal']).optional(),
         brand: z.enum(['lenskart', 'john-jacobs', 'fossil', 'ojos']).optional(),
         gender: z.enum(['men', 'women', 'unisex']).optional(),
-        img: z.string().optional(),
+        img: z.array(z.string()).optional(),
         addedBy: z.string().optional()
     })
 });
